@@ -1,0 +1,10 @@
+Please note that no image violates any licence agreements.
+Each image is downloaded from www.pixabay.com and every image
+used in our project is available for personal AND commercial use as well.
+
+Although we know this was not a requirement, we decided to stay
+professional until the very end. Therefore, the project can be
+put into production without any copyright concerns.
+
+In addition, logo and form elements have been designed by one of the 
+team members in Sketch. Resource files are available in Designs folder.

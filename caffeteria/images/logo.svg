@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="419px" height="419px" viewBox="0 0 419 419" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Logo">
+            <rect id="Rectangle" fill="#DF0005" x="0" y="0" width="419" height="419" rx="29"></rect>
+            <text id="SSST" font-family="SukhumvitSet-Bold, Sukhumvit Set" font-size="144" font-weight="bold" fill="#FFFFFF">
+                <tspan x="56.136" y="256">SSST</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

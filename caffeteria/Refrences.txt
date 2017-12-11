@@ -1,0 +1,20 @@
+1) JS Sweet Alert:
+https://sweetalert.js.org/
+
+2) Pure CSS for tables:
+https://purecss.io/
+
+3) Bulma for forms:
+https://bulma.io/
+
+4) TimePicker JS
+
+https://github.com/jonataswalker/timepicker.js
+
+5) jQuery
+
+https://code.jquery.com/
+
+6) ChartJS
+
+http://www.chartjs.org/
