@@ -67,7 +67,7 @@
             type:"get",
             url:"./ajax_php/get_revenue_details.php",
             success: function(data){
-                data = JSON.parse(data);
+                //data = JSON.parse(data);
                 for(var i = data.length - 1; i >= 0; i--){
                     myChart.data.labels.push(data[i]["monthyear"]);
                     myChart.data.datasets[0].data.push(data[i]["revenue"]);

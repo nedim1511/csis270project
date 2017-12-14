@@ -31,7 +31,7 @@
             type:"get",
             url:"./ajax_php/get_finished_orders.php",
             success: function(data){
-                var orders = JSON.parse(data);
+                var orders = data; //JSON.parse(data);
                 console.log(orders);
                 var html = "";
                 for(var i in orders){

@@ -38,7 +38,7 @@
             type:"get",
             url:"./ajax_php/get_students_in_debt.php",
             success: function(data){
-                var meals = JSON.parse(data);
+                var meals = data; //JSON.parse(data);
                 var html = "";
                 for(var i in meals){
                     html += "<tr>";

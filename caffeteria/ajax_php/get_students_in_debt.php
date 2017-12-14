@@ -25,5 +25,5 @@
 
     mysqli_free_result($r);
     mysqli_close($dbc);
-
+    header('Content-Type: application/json');
     echo json_encode($students);

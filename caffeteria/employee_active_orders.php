@@ -32,7 +32,7 @@
            type:"get",
            url:"./ajax_php/get_student_orders.php",
            success: function(data){
-               var orders = JSON.parse(data);
+               var orders = data; //JSON.parse(data);
                var html = "";
                for(var i in orders){
                    html += "<tr>";

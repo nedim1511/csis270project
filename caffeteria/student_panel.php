@@ -31,7 +31,7 @@
            type:"get",
            url:"./ajax_php/get_num_orders_student.php",
            success: function(data){
-               data = JSON.parse(data);
+               //data = JSON.parse(data); not needed because header is set to JSON.parse()
                $("#number_of_active_orders").html(data["num_of_orders"]);
                $("#owns").html(data["owns"]);
            },
