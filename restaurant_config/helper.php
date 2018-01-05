@@ -49,23 +49,32 @@ function extract_name_from_email($email){
     $fname = "";
     $lname = "";
     $i = 0;
-    while($email[$i] != '.') $fname .= $email[$i++];
+    while($i < strlen($email) && $email[$i] != '.') $fname .= $email[$i++];
     $i++; // skip the dot
-    while($email[$i] != '@') $lname .= $email[$i++];
+    while($i < strlen($email) && $email[$i] != '@') $lname .= $email[$i++];
     $fname[0] = strtoupper($fname[0]); // capitalize first name
     $lname[0] = strtoupper($lname[0]); // capitalize last name
 
     return $fname . " " . $lname;
 }
-
+function name_surname_format($email){
+    $firstName = false;
+    $dot = false;
+    for($i = 0; $i < strlen($email) && $email[$i] != '@'; $i++){
+        if($email[$i] != '.' && !$firstName) $firstName = true;
+        else if($email[$i] == '.') $dot = true;
+        else if($email[$i] != '.' && $firstName && $dot) return true;
+    }
+    return false;
+}
 function delete_student($dbc, $s_id, $deny=false){
-    $query = "DELETE FROM students WHERE" . ($deny ? " activated=0 AND" : "") . " s_id=?";
+    $query = "DELETE FROM users WHERE" . ($deny ? " activated=0 AND" : "") . " u_id=?";
     $stmt = mysqli_prepare($dbc, $query);
-    mysqli_stmt_bind_param($stmt, "i", $_GET["s_id"]);
+    mysqli_stmt_bind_param($stmt, "i", $s_id);
     if(mysqli_stmt_execute($stmt)){
         if (mysqli_stmt_affected_rows($stmt)) {
-            $_SESSION["msg"] = "You have successfully " . ($deny ? "denied and " : "") . "deleted the student" .
-                ($deny ? "registration request!" : "!");
+            $_SESSION["msg"] = "You have successfully " . ($deny ? " denied and " : "") . "deleted the student" .
+                ($deny ? " registration request!" : "!");
             $_SESSION["type"] = "success";
             $_SESSION["subject"] = "Success!";
         }
@@ -76,7 +85,7 @@ function delete_student($dbc, $s_id, $deny=false){
         }
     }
     else {
-        $_SESSION["msg"] = "An error occured!";
+        $_SESSION["msg"] = "An error occured!" . mysqli_error($dbc);
         $_SESSION["type"] = "error";
         $_SESSION["subject"] = "Error!";
     }
@@ -85,17 +94,15 @@ function delete_student($dbc, $s_id, $deny=false){
 }
 
 function get_num_of_orders($dbc, $s_id=""){
-    $query = "SELECT COUNT(o_id) AS num_of_orders FROM orders";
+    $query = "SELECT COUNT(o_id) AS num_of_orders FROM orders WHERE finished=0";
     if(!empty(trim($s_id))){
         $query = "SELECT s.owns, COUNT(o_id) AS num_of_orders FROM orders AS o
-                  INNER JOIN students AS s ON s.s_id=o.student WHERE s_id=$s_id";
+                  INNER JOIN students AS s ON s.s_id=o.student WHERE s_id=$s_id AND o.finished=0";
     }
 
     $r = mysqli_query($dbc, $query);
     $num_of_orders = mysqli_fetch_array($r, MYSQLI_ASSOC);
-
     mysqli_free_result($r);
     mysqli_close($dbc);
-
     return json_encode($num_of_orders);
 }
