@@ -9,7 +9,7 @@
         require("../restaurant_config/mysql_connect.php");
 
         $employeee_id = $_GET["e_id"];
-        $query = "DELETE FROM employees WHERE e_id=?";
+        $query = "DELETE FROM users WHERE u_id=? AND type='EMPLOYEE'";
         $stmt = mysqli_prepare($dbc, $query);
         mysqli_stmt_bind_param($stmt, "i", $employeee_id);
         if(mysqli_stmt_execute($stmt)){

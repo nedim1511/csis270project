@@ -9,6 +9,7 @@
         <li><a href="?category=Pasta">Pasta</a></li>
         <li><a href="?category=Salads">Salads</a></li>
         <li><a href="?category=Desserts">Desserts</a></li>
+        <li><form><input type="text" placeholder="Search" name="meal"></form></li>
     </ul>
 </nav>
 <!-- End of Navigation -->

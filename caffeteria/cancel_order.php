@@ -6,7 +6,7 @@
     }
     if(isset($_GET["o_id"])){
         require("../restaurant_config/mysql_connect.php");
-        $query = "DELETE FROM orders WHERE o_id=? AND student=?";
+        $query = "DELETE FROM orders WHERE o_id=? AND student=? AND finished=0";
         $stmt = mysqli_prepare($dbc, $query);
         mysqli_stmt_bind_param($stmt, "ii", $_GET["o_id"], $_SESSION["s_id"]);
 

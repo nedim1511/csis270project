@@ -11,20 +11,29 @@
             require("../restaurant_config/mysql_connect.php");
 
             $query = "SELECT m.picture, m.name, m.available, m.prep_time, m.price, m.m_id, COUNT(o.o_id) AS num_bought
-                      FROM meals as m
-                      INNER JOIN ORDERS_HISTORY AS O ON m.m_id=o.meal
-                      GROUP BY m.m_id
+                      FROM MEALS as m
+                      INNER JOIN ORDERS AS o ON m.m_id=o.meal
+                      WHERE o.finished=1
+                      GROUP BY m.m_id, m.picture, m.name, m.available, m.prep_time, m.price
                       ORDER BY num_bought DESC LIMIT 5";
+            $heading_info = "Best Sellers";
             if(isset($_GET["category"])){
 
                 $category = mysqli_real_escape_string($dbc, urldecode($_GET["category"]));
-
+                $heading_info = urldecode($_GET["category"]);
                 $query = "SELECT m_id, picture, name, price, prep_time, available 
                           FROM meals WHERE category='$category'";
             }
+            if(isset($_GET["meal"])){
+                $meal = mysqli_real_escape_string($dbc, urldecode($_GET["meal"]));
+                $heading_info = "Results for: " .  urldecode($_GET["meal"]);
+                $query = "SELECT m_id, picture, name, price, prep_time, available
+                          FROM meals 
+                          WHERE name LIKE \"%{$_GET["meal"]}%\" OR category LIKE \"%{$_GET["meal"]}%\"";
+            }
             $r = mysqli_query($dbc, $query);
             if(mysqli_num_rows($r) > 0){
-                echo "<h2>" . (isset($_GET["category"]) ? urldecode($_GET["category"]) : "Best Sellers") . "</h2>";
+                echo "<h2>$heading_info</h2>";
                 echo "<div class=\"food\">";
                 echo "<ul>";
                 while($row = mysqli_fetch_array($r)){

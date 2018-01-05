@@ -2,12 +2,16 @@
     include("./includes/employee_header.inc.php");
 
     require("../restaurant_config/mysql_connect.php");
+
     function validate_form(){
         if(empty($_POST["email"])){
             return "The email field cannot be empty!";
         }
         else if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
             return "The email has to be of a valid format!";
+        }
+        else if(!name_surname_format($_POST["email"])){
+            return "Email must be in the format name.surname@something.something";
         }
         return true;
     }
@@ -18,25 +22,20 @@
         else{
             $email = strip_tags(trim($_POST["email"]));
             $phone = strip_tags(trim($_POST["phone"]));
-            $fname = false;
-            $lname = false;
-            list($fname, $lname) = explode(" ", extract_name_from_email($email));
             $e_id = $_SESSION["e_id"];
-            $query = "UPDATE employees SET email=?, fname=?, lname=?, phone=? WHERE e_id=?";
+            $query = "UPDATE users INNER JOIN employees ON u_id=e_id SET email=?, phone=? WHERE u_id=?";
             $stmt = mysqli_prepare($dbc, $query);
-            mysqli_stmt_bind_param($stmt, "ssssi", $email, $fname, $lname, $phone, $e_id);
+            mysqli_stmt_bind_param($stmt, "ssi", $email, $phone, $e_id);
 
             if(mysqli_stmt_execute($stmt)) {
                 if (mysqli_stmt_affected_rows($stmt) > 0) {
-                    $_SESSION["fname"] = $fname;
-                    $_SESSION["lname"] = $lname;
                     $_SESSION["msg"] = "You've successfully updated your info!";
                     $_SESSION["type"] = "success";
                     $_SESSION["subject"] = "Succesfully edited!";
                 }
             }
             else{
-                $_SESSION["msg"] = "An error occured!";
+                $_SESSION["msg"] = "An error occured!" . mysqli_error($dbc);
                 $_SESSION["type"] = "error";
                 $_SESSION["subject"] = "Error!";
             }
@@ -51,7 +50,7 @@
     <h3>Settings</h3>
     <form method="post" action="employee_settings.php">
     <?php
-        $query = "SELECT phone, email, salary FROM employees WHERE e_id={$_SESSION["e_id"]}";
+        $query = "SELECT phone, email, salary FROM employees, users WHERE u_id=e_id AND u_id={$_SESSION["e_id"]}";
         $r = mysqli_query($dbc, $query);
 
         $employee = mysqli_fetch_array($r, MYSQLI_ASSOC);

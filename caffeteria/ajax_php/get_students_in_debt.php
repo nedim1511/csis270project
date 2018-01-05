@@ -7,9 +7,9 @@
     require("../../restaurant_config/mysql_connect.php");
 
     // this query is simpler because it uses a stored derived attribute that is updated through the triggers
-    $query = "SELECT owns, CONCAT(fname, CONCAT(' ', lname)) AS full_name FROM students
-              WHERE owns > 0
-              ORDER BY owns DESC";
+    $query = "SELECT owns, CONCAT(fname, CONCAT(' ', lname)) AS full_name FROM students, users
+              WHERE u_id=s_id AND owns > 0
+              ORDER BY owns, full_name DESC";
 
     // this query is a bit more complicated because we have to always calculate the derived attribute
     // we went with the first option because it simplifies our other queries

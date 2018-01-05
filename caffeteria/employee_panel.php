@@ -32,6 +32,7 @@
             url:"./ajax_php/get_num_orders.php",
             success: function(data){
                 $("#number_of_active_orders").html(data["num_of_orders"]); //JSON.parse(data)
+                console.log(data);
             },
             complete: function(data){
                 setTimeout(getNumOfOrders, 2000);

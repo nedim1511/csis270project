@@ -5,9 +5,8 @@
         redirect_to("index.php");
 
     if(isset($_GET["s_id"]) && isset($_GET["o_id"])){
-        echo "we're here";
         require("../restaurant_config/mysql_connect.php");
-        $query = "UPDATE orders_history SET paid=1 WHERE orders_history.student=? AND o_id=? AND paid=0";
+        $query = "UPDATE orders SET paid=1 WHERE orders.student=? AND o_id=? AND paid=0";
         $stmt = mysqli_prepare($dbc, $query);
         mysqli_stmt_bind_param($stmt, "ii", $_GET["s_id"], $_GET["o_id"]);
         if(mysqli_stmt_execute($stmt)){

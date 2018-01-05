@@ -20,7 +20,8 @@
 
         <tbody>
         <?php
-        $query = "SELECT s_id, fname, lname, email, owns FROM students WHERE activated=1 ORDER BY owns DESC";
+        $query = "SELECT s_id, fname, lname, email, owns FROM students, users WHERE u_id=s_id AND activated=1 
+                  ORDER BY owns DESC";
         $r = mysqli_query($dbc, $query);
 
         while($row = mysqli_fetch_array($r)){

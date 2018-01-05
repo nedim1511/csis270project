@@ -22,7 +22,7 @@
     }
 
     function email_registered($email, $dbc) { // returns true if the email is registered otherwise false
-        $query = "SELECT s_id FROM students WHERE email='$email'";
+        $query = "SELECT u_id FROM users WHERE email='$email'";
         $r = mysqli_query($dbc, $query);
         if(mysqli_num_rows($r) > 0){
             mysqli_free_result($r);
@@ -46,7 +46,8 @@
 
             if(!email_registered($email, $dbc)) { // check if the student with the inputed mail is already registered
                 $pass_hash_len = PASS_HASH_LEN;
-                $query = "INSERT INTO students (fname, lname, email, password) VALUES(?, ?, ?, SHA2(?, $pass_hash_len))";
+                $query = "INSERT INTO users (fname, lname, email, password, type, activated) 
+                          VALUES(?, ?, ?, SHA2(?, $pass_hash_len), 'STUDENT', 0)";
                 $stmt = mysqli_prepare($dbc, $query);
                 mysqli_stmt_bind_param($stmt, "ssss", $first_name, $last_name, $email, $password);
                 mysqli_stmt_execute($stmt);

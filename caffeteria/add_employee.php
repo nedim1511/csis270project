@@ -5,11 +5,14 @@
         if(empty($_POST["email"])) {
             return "You must enter an email";
         }
-        else if(filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+        else if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
             return "You must enter a valid email format!";
         }
         else if(strpos($_POST["email"],"ssst.edu.ba") === false){
             return "The email has to be SSST based";
+        }
+        else if(!name_surname_format($_POST["email"])){
+            return "Email must be in the format name.surname@something.something";
         }
         if(strlen($_POST["password"]) < 6) {
             return "The password has to be at least 6 characters long!";
@@ -27,7 +30,7 @@
     }
 
     function email_registered($email, $dbc) { // returns true if the email is registered otherwise false
-        $query = "SELECT e_id FROM employees WHERE email='$email'";
+        $query = "SELECT u_id FROM users WHERE email='$email'";
         $r = mysqli_query($dbc, $query);
         if(mysqli_num_rows($r) > 0){
             mysqli_free_result($r);
@@ -52,11 +55,18 @@
             list($first_name, $last_name) = explode(" ", extract_name_from_email($email));
             if(!email_registered($email, $dbc)) { // check if the employee with the inputed mail is already registered
                 $pass_hash_len = PASS_HASH_LEN;
-                $query = "INSERT INTO employees (fname, lname, email, password, salary, phone) 
-                                            VALUES(?, ?, ?, SHA2(?, $pass_hash_len), ?, ?)";
+                $query = "INSERT INTO users (fname, lname, email, password, type) 
+                                            VALUES(?, ?, ?, SHA2(?, $pass_hash_len), 'EMPLOYEE')";
                 $stmt = mysqli_prepare($dbc, $query);
-                mysqli_stmt_bind_param($stmt, "ssssds", $first_name, $last_name, $email,
-                    $password, $salary, $phone);
+                mysqli_stmt_bind_param($stmt, "ssss", $first_name, $last_name, $email,
+                    $password);
+                mysqli_stmt_execute($stmt);
+
+                $last_id = mysqli_stmt_insert_id($stmt);
+                mysqli_stmt_free_result($stmt);
+                $query = "UPDATE employees SET salary=?, phone=? WHERE e_id=?";
+                $stmt = mysqli_prepare($dbc, $query);
+                mysqli_stmt_bind_param($stmt, "dsi", $salary, $phone, $last_id);
                 mysqli_stmt_execute($stmt);
                 if (mysqli_stmt_affected_rows($stmt) == 1) {
                     display_msg("Success",

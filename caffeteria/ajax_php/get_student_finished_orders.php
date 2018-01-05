@@ -5,9 +5,9 @@
         redirect_to("index.php");
 
     require("../../restaurant_config/mysql_connect.php");
-    $query = "SELECT DATE_FORMAT(o.date, \"%d.%m.%Y\") AS date, o.name, o.price, o.paid
-              FROM orders_history AS o
-              WHERE o.student={$_SESSION["s_id"]} 
+    $query = "SELECT DATE_FORMAT(o.date, \"%d.%m.%Y\") AS date, m.name, m.price, o.paid
+              FROM orders AS o INNER JOIN meals as m ON o.meal=m.m_id
+              WHERE o.student={$_SESSION["s_id"]} AND o.finished=1
               ORDER BY o.paid, o.date DESC";
     $r = mysqli_query($dbc, $query);
     $student_orders = array();

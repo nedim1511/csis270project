@@ -9,7 +9,7 @@
     $query = "SELECT m.name, m.price, o.time, o.comment, o.o_id
               FROM meals AS m 
               INNER JOIN orders AS o ON m.m_id=o.meal
-              WHERE o.student={$_SESSION["s_id"]}";
+              WHERE o.student={$_SESSION["s_id"]} AND o.finished=0";
     $r = mysqli_query($dbc, $query);
     $student_orders = array();
     while($row = mysqli_fetch_array($r))

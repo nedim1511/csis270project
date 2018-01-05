@@ -12,7 +12,7 @@
         <div class="small_dashboard_wrapper">
             <h3>Employees</h3>
             <?php
-                $query = "SELECT e_id, fname, lname FROM employees";
+                $query = "SELECT u_id as e_id, fname, lname FROM users WHERE type='EMPLOYEE'";
                 $r = mysqli_query($dbc, $query);
 
                 while($row = mysqli_fetch_array($r)){

@@ -12,7 +12,7 @@
     require("../restaurant_config/mysql_connect.php");
     $id = mysqli_real_escape_string($dbc, $_GET["e_id"]);
     $query = "SELECT fname, lname, email, salary, phone, IFNULL(phone, 'No number') as phone 
-              FROM employees WHERE e_id=$id";
+              FROM employees, users WHERE e_id=u_id AND e_id=$id";
     $r = mysqli_query($dbc, $query);
     if(mysqli_num_rows($r) > 0){
         $employee = mysqli_fetch_array($r, MYSQLI_ASSOC);

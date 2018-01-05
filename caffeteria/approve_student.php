@@ -7,7 +7,7 @@
     if($_SERVER["REQUEST_METHOD"] == "GET"){
         if(isset($_GET["s_id"])){
             $id = $_GET["s_id"];
-            $query = "UPDATE students SET activated=1 WHERE s_id=?";
+            $query = "UPDATE users SET activated=1 WHERE u_id=?";
             $stmt = mysqli_prepare($dbc, $query);
             mysqli_stmt_bind_param($stmt, "i", $id);
             if(mysqli_stmt_execute($stmt)){
@@ -41,7 +41,7 @@
 
         <tbody>
         <?php
-            $query = "SELECT s_id, fname, lname, email FROM students WHERE activated=0";
+            $query = "SELECT u_id as s_id, fname, lname, email FROM users WHERE activated=0 AND type='STUDENT'";
             $r = mysqli_query($dbc, $query);
 
             while($row = mysqli_fetch_array($r)){

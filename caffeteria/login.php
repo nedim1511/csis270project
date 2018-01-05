@@ -1,11 +1,10 @@
 <?php
     include("./includes/header.inc.php");
 
-    function user_exists($table_name, $email, $password, $dbc){
-        $id = $table_name[0] . "_id";
-        $query = "SELECT $id";
-        if($table_name == "students") $query .= ",activated";
-        $query .= ",fname, lname FROM $table_name WHERE email='$email' AND password=SHA2('$password', 224)";
+    function user_exists($email, $password, $dbc){
+        $query = "SELECT u_id , fname, lname, activated, type 
+                  FROM USERS 
+                  WHERE email='$email' AND password=SHA2('$password', 224)";
         $r = mysqli_query($dbc, $query);
         if(mysqli_num_rows($r) > 0) {
             $res = mysqli_fetch_array($r);
@@ -20,36 +19,40 @@
         $email = mysqli_real_escape_string($dbc, strip_tags($_POST["email"]));
         $password = mysqli_real_escape_string($dbc, $_POST["password"]);
 
-        if($res = user_exists("students", $email, $password, $dbc)){
-            if(!$res["activated"]){
-                display_msg("Error", "You must wait until the admin activates your account",
-                    "error");
-            }
-            else {
-                $_SESSION["s_id"] = $res["s_id"];
+        if($res = user_exists($email, $password, $dbc)){
+            if($res["type"] == "ADMIN"){
+                $_SESSION["a_id"] = $res["u_id"];
                 $_SESSION["first_login"] = true;
                 $_SESSION["fname"] = $res["fname"];
                 $_SESSION["lname"] = $res["lname"];
-                redirect_to("student_panel.php");
+                redirect_to("admin_panel.php");
             }
-        }
-        else if($res = user_exists("employees", $email, $password, $dbc)){
-            $_SESSION["e_id"] = $res["e_id"];
-            $_SESSION["first_login"] = true;
-            $_SESSION["fname"] = $res["fname"];
-            $_SESSION["lname"] = $res["lname"];
-            redirect_to("employee_panel.php");
-        }
-        else if($res = user_exists("administrators", $email, $password, $dbc)){
-            $_SESSION["a_id"] = $res["a_id"];
-            $_SESSION["first_login"] = true;
-            $_SESSION["fname"] = $res["fname"];
-            $_SESSION["lname"] = $res["lname"];
-            redirect_to("admin_panel.php");
+            else if($res["type"] == "EMPLOYEE"){
+                $_SESSION["e_id"] = $res["u_id"];
+                $_SESSION["first_login"] = true;
+                $_SESSION["fname"] = $res["fname"];
+                $_SESSION["lname"] = $res["lname"];
+                redirect_to("employee_panel.php");
+            }
+            else {
+                $activated = intval($res["activated"]);
+                if($activated) {
+                    $_SESSION["s_id"] = $res["u_id"];
+                    $_SESSION["first_login"] = true;
+                    $_SESSION["fname"] = $res["fname"];
+                    $_SESSION["lname"] = $res["lname"];
+                    redirect_to("student_panel.php");
+                }
+                else{
+                    display_msg("Warning", "You must wait until the administrators activates your account!",
+                        "warning");
+                }
+            }
         }
         else{
             display_msg("Error", "Email/Password combination invalid!", "error");
         }
+        mysqli_close($dbc);
     }
     else if($_SERVER["REQUEST_METHOD"] == "GET"){
         if(isset($_SESSION["s_id"])) redirect_to("student_panel.php");

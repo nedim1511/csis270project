@@ -7,10 +7,11 @@
     require("../../restaurant_config/mysql_connect.php");
 
     $query = "SELECT CONCAT(MONTHNAME(date), CONCAT(\" \", YEAR(date))) AS monthyear, 
-              MONTHNAME(date) AS month, SUM(price) AS revenue 
-              FROM orders_history 
+              MONTHNAME(date) AS month, SUM(m.price) AS revenue 
+              FROM orders as o INNER JOIN meals as m ON o.meal=m.m_id
+              WHERE o.finished=1
               GROUP BY month 
-              ORDER BY DATE_FORMAT(date, \"%y\"), DATE_FORMAT(date, \"%m\") DESC LIMIT 12;";
+              ORDER BY o.date DESC LIMIT 12;";
 
     $r = mysqli_query($dbc, $query);
 

@@ -8,8 +8,9 @@
     $query = "SELECT o.time, o.o_id, m.name, o.comment, m.price, CONCAT(s.fname, CONCAT(\" \", s.lname)) AS full_name
               FROM orders AS o 
               INNER JOIN meals AS m ON o.meal=m.m_id 
-              INNER JOIN students AS s ON o.student=s.s_id
-              ORDER BY time, full_name";
+              INNER JOIN users AS s ON o.student=s.u_id
+              WHERE o.finished=0
+              ORDER BY o.time, full_name";
     $r = mysqli_query($dbc, $query);
     $student_orders = array();
     while($row = mysqli_fetch_array($r))
