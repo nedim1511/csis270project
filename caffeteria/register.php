@@ -80,7 +80,9 @@
 	<main>
 		<h2>Create your account</h2>
 		<form class="login" action="register.php" method="post">
-    		<input type="email" placeholder="Student email address" id="email" name="email" />
+    		<input type="email" placeholder="Student email address"
+                   value="<?php if(isset($_POST["email"])) echo $_POST["email"] ?>"
+                   id="email" name="email" />
     		<input type="password" placeholder="Password" id="password" name="password" />
     		<input type="password" placeholder="Repeat password" id="password_repeat" name="pass_confirm" />
     		<input type="submit" value="Create an account">

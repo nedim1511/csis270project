@@ -64,7 +64,8 @@
 	<main>
         <h2>Log into your account</h2>
         <form class="login" method="post" action="login.php">
-            <input type="email" placeholder="Email address" id="email" name="email"/>
+            <input type="email" placeholder="Email address"
+                   id="email" value="<?php if(isset($_POST["email"])) echo $_POST["email"] ?>" name="email"/>
             <input type="password" placeholder="Password" id="password" name="password"/>
             <input type="submit" value="Log in">
         </form>
