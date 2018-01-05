@@ -12,6 +12,9 @@
         else if(strpos($_POST["email"],"stu.ssst.edu.ba") === false){
             return "You have to be a student of SSST in order to register!";
         }
+        else if(!name_surname_format($_POST["email"])){
+            return "Email must be in the format name.surname@stu.ssst.edu.ba";
+        }
         if(strlen($_POST["password"]) < 6) {
             return "The password has to be at least 6 characters long!";
         }

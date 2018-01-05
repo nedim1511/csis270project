@@ -11,7 +11,7 @@
             return "The email has to be of a valid format!";
         }
         else if(!name_surname_format($_POST["email"])){
-            return "Email must be in the format name.surname@something.something";
+            return "Email must be in the format name.surname@ssst.edu.ba";
         }
         return true;
     }
