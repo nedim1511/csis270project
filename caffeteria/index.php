@@ -29,7 +29,8 @@
                 $heading_info = "Results for: " .  urldecode($_GET["meal"]);
                 $query = "SELECT m_id, picture, name, price, prep_time, available
                           FROM meals 
-                          WHERE name LIKE \"%{$_GET["meal"]}%\" OR category LIKE \"%{$_GET["meal"]}%\"";
+                          WHERE UPPER(name) LIKE UPPER(\"%{$_GET["meal"]}%\") OR 
+                                UPPER(category) LIKE UPPER(\"%{$_GET["meal"]}%\")";
             }
             $r = mysqli_query($dbc, $query);
             if(mysqli_num_rows($r) > 0){
