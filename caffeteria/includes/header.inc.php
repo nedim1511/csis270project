@@ -35,8 +35,7 @@
         </div>
         <div class="logo">
             <a href="index.php">
-                <!-- Logo designed by Nedim in Sketch -->
-                <img src="images/logo.svg" alt="SSST Food Court" title="SSST Food Court" />
+                <img src="images/logo.png" alt="SSST Food Court" title="SSST Food Court" />
             </a>
             <h1>Food Court</h1>
             <p class="header_slogan">Say goodbye to waiting - order your meal now!</p>
