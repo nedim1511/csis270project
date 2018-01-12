@@ -6,14 +6,23 @@
         redirect_to("login.php");
     }
     require("../restaurant_config/mysql_connect.php");
-
+    function validate_form(){
+        if(empty(trim($_POST["time"]))){
+            return "You must give a time for your food to be prepared!";
+        }
+        if(!preg_match("/(2[0-3]|[01][0-9]):([0-5][0-9])/", trim($_POST["time"]))){
+            return "Time has to be in the correct format! HH:MM";
+        }
+        return true;
+    }
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-        if(empty($_POST["time"])){
-            display_msg("Warning", "You must give a time for your food to be prepared!", "warning");
-        }
-        else if(!preg_match("/(2[0-3]|[01][0-9]):([0-5][0-9])/", trim($_POST["time"]))){
-            display_msg("Warning", "Time has to be in the correct format! HH:MM", "warning");
+        if(($validation = validate_form()) !== true){
+            $_SESSION["msg_active"] = true;
+            $_SESSION["msg"] = $validation;
+            $_SESSION["subject"] = "Error";
+            $_SESSION["type"] = "error";
+            redirect_to("order.php", "m_id", $_POST["m_id"]);
         }
         else{
             $time = trim($_POST["time"]);
@@ -42,7 +51,7 @@
             redirect_to("index.php");
         }
     }
-
+    display_notification();
     if(isset($_GET["m_id"])){
         $id = mysqli_real_escape_string($dbc, $_GET["m_id"]);
         $query = "SELECT name, available, picture FROM meals WHERE m_id=$id";
